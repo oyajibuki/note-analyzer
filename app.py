@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, send_file
 import requests
-import cloudscraper
+from curl_cffi import requests as cffi_requests
 import urllib.parse
 import time
 from datetime import datetime, timedelta
@@ -8,9 +8,6 @@ import csv
 import io
 
 app = Flask(__name__)
-
-# CloudScraperの初期化
-scraper = cloudscraper.create_scraper()
 
 # JSONデータから記事情報を根こそぎ見つける関数
 def find_notes_in_json(obj, found_notes, seen_keys):
@@ -93,8 +90,8 @@ def get_note_ranking(keyword, duration="all"):
             print(f"Fetching page {page+1}...")
             time.sleep(1) # サーバーへの配慮
             
-            # CloudScraperを使用
-            response = scraper.get(url)
+            # curl_cffiを使用してブラウザのTLS指紋を模倣 (403回避)
+            response = cffi_requests.get(url, impersonate="chrome")
             response.raise_for_status()
             
             json_data = response.json()
