@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, send_file
 import requests
+import cloudscraper
 import urllib.parse
 import time
 from datetime import datetime, timedelta
@@ -7,6 +8,20 @@ import csv
 import io
 
 app = Flask(__name__)
+
+# CloudScraperの初期化
+scraper = cloudscraper.create_scraper()
+
+# JSONデータから記事情報を根こそぎ見つける関数
+def find_notes_in_json(obj, found_notes, seen_keys):
+    # ... (omitting unchanged parts for brevity, but tool requires full context or just changes)
+    # Since I am replacing the top part, I will just provide the top part.
+    # Wait, the tool requires me to match TargetContent exactly.
+    # I will replace the imports and the get_note_ranking function's request call.
+    pass
+
+# Let's do it in chunks or simpler replace
+
 
 # JSONデータから記事情報を根こそぎ見つける関数
 def find_notes_in_json(obj, found_notes, seen_keys):
@@ -77,7 +92,9 @@ def get_note_ranking(keyword, duration="all"):
         try:
             print(f"Fetching page {page+1}...")
             time.sleep(1) # サーバーへの配慮
-            response = requests.get(url, headers=headers)
+            
+            # CloudScraperを使用
+            response = scraper.get(url)
             response.raise_for_status()
             
             json_data = response.json()
